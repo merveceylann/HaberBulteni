@@ -1,0 +1,77 @@
+﻿@model NewsPageViewModel
+
+@{
+    ViewData["Title"] = "Index";
+
+    string hrefStart = "/ItemList/Index?";
+    if (ViewBag.searchParam != null)
+    {
+        hrefStart = "/Itemlist/Index" + ViewBag.searchParam + "&";
+    }
+}
+
+<div class="container">
+    <div class="row">
+        <ul style="list-style:none;display:block;">
+
+            @if (!(ViewBag.currentPage == null) && ViewBag.currentPage > 1)
+            {
+                <li style="display:inline;margin:10px;position:relative"><a href="@(hrefStart)pageNumber=@(ViewBag.currentPage-1)">Geri</a></li>
+            }
+            @for (int i = 1; i <= Model.TotalPageNumber; i++)
+            {
+                <li style="display:inline;margin:10px;position:relative"><a href="@(hrefStart)pageNumber=@(i)">@i</a></li>
+            }
+
+            @if (!(ViewBag.currentPage == null) && ViewBag.currentPage < Model.TotalPageNumber)
+            {
+                <li style="display:inline;margin:10px;position:relative"><a href="@(hrefStart)pageNumber=@(ViewBag.currentPage+1)">İleri</a></li>
+            }
+        </ul>
+    </div>
+    <div class="row">
+
+
+        <div class="col-3">
+            <div class="row">
+                <form method="get">
+                    <input class="form-control" placeholder="Ara" name="searchTitle" />
+                    <input class="btn btn-secondary" type="submit" />
+                </form>
+            </div>
+            <div class="row">
+                <ul>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <li>
+                            <a href="/Itemlist/Index?categoryId=@category.Id">@category.Title</a>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="col-9">
+            @foreach (var item in Model.News)
+            {
+                <div class="row">
+                    <div class="col-2">
+                        <img src="@item.ImageUrl" style="width:100px;height:100px">
+                    </div>
+                    <div class="col-8">
+                        <h4>
+                            @item.Title
+                        </h4>
+                    </div>
+                    <div class="col-2">
+                        <a class="btn btn-primary" href="/Itemlist/NewsDetail?newsId=@item.Id">Detayı Gör</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+    </div>
+
+</div>
